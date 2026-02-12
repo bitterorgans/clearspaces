@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Grid Background</title>
+  <link rel="stylesheet" href="styles.css">
+  <link href="https://api.fontshare.com/v2/css?f[]=comico@400&display=swap" rel="stylesheet">
+</head>
+    
+  
+    
+<body class="animate-page">
+
+        <!--first pages-->
+    <img src="planepho/thirpage.png" alt="thirdpag" class="thirdpag">
+           <!--tabs--> 
+               <div>
+               <a href="homepage.html">
+               <img src="planepho/thir stick/tab1ap.png" class="tab tab1ap">
+               </a>
+
+               <a href="standards.html">
+                 <img src="planepho/thir stick/tab2ap.png" class="tab tab2ap">
+               </a>
+
+               <a href="schols.html">
+                 <img src="planepho/thir stick/tab3ap.png" class="tab tab3ap">
+               </a>
+ 
+                 <img src="planepho/thir stick/extratab.png" class="extratab"></div>
+  
+  
+         <!--text--> 
+         <div class="gen-rem">GENERAL</div>
+           <div class="cur-ass">CURRENT ASSESSMENTS</div>
+  
+
+            <!--bg stick-->       
+                <img src="planepho/thir stick/bgstick3.png" alt="Background stickers" class="bg-stickers3">
+  
+           <!--first page stickers-->
+                <div>
+    <img src="planepho/thir stick/snailstick.png"
+       class="snail-sticker"
+       alt="sticker">
+ 
+<div>
+<div class="apstick-wrap ap1">
+  <img src="planepho/thir stick/ap1stick.png" class="apstick-img" alt="sticker">
+</div>
+
+<div class="apstick-wrap ap2">
+  <img src="planepho/thir stick/ap2stick.png" class="apstick-img" alt="sticker">
+</div>
+
+<div class="apstick-wrap ap3">
+  <img src="planepho/thir stick/ap3stick.png" class="apstick-img" alt="sticker">
+</div></div>
+  
+      <img src="planepho/thir%20stick/ladybugstick.png"
+       class="ladybug-sticker"
+       alt="sticker">
+ 
+        <img src="planepho/thir%20stick/ladybugstick.png"
+       class="ladybug-sticker2"
+       alt="sticker">
+                  
+              <img src="planepho/thir%20stick/fox.png"
+       class="fox-sticker"
+       alt="sticker">
+                  
+                <img src="planepho/thir%20stick/squir.png"
+       class="squir-sticker"
+       alt="sticker">
+  
+          <img src="planepho/thir%20stick/mushed.png"
+       class="mushed-sticker"
+       alt="sticker"></div>
+
+            <!--1st page container-->
+                <div class="page-layer">
+                  <div class="page-inner">
+
+                    <!-- Top expanding reminder -->
+                    <div class="reminder-box top-reminder" data-key="top-reminder">
+
+  <div class="box-header">
+    <div class="box-title">REMINDERS</div>
+    <button class="add-item">＋</button>
+  </div>
+
+  <div class="item-list"></div>
+</div>
+
+                    <!-- Scrollable columns -->
+                    <div class="scroll-section">
+      <div class="columns">
+
+        <!-- COLUMN 1 -->
+        <div class="column">
+          <div class="reminder-box" data-key="col1-box1">
+            <div class="box-header">
+              <div class="box-title">ENG</div>
+              <button class="add-item">＋</button>
+            </div>
+            <div class="item-list"></div>
+          </div>
+
+          <div class="reminder-box" data-key="col1-box2">
+            <div class="box-header">
+              <div class="box-title">MUSE</div>
+              <button class="add-item">＋</button>
+            </div>
+            <div class="item-list"></div>
+          </div>
+        </div>
+
+        <!-- COLUMN 2 -->
+        <div class="column">
+          <div class="reminder-box" data-key="col2-box1">
+            <div class="box-header">
+              <div class="box-title">CLS</div>
+              <button class="add-item">＋</button>
+            </div>
+            <div class="item-list"></div>
+          </div>
+
+          <div class="reminder-box" data-key="col2-box2">
+            <div class="box-header">
+              <div class="box-title">ORC</div>
+              <button class="add-item">＋</button>
+            </div>
+            <div class="item-list"></div>
+          </div>
+        </div>
+
+      </div>
+    </div></div></div>
+
+                    <!-- first page script -->
+                   <script>
+                   /* ==============================
+   FUNCTION TO SETUP EACH BOX
+============================== */
+                   document.querySelectorAll('.reminder-box').forEach(box => {
+  const key = box.dataset.key;
+  const textarea = box.querySelector('textarea');
+
+  // Load saved top-reminder or notes-only textareas
+  if(textarea) {
+    const saved = localStorage.getItem(key);
+    if(saved) textarea.value = saved;
+
+    const update = () => {
+      textarea.style.height = 'auto';
+      textarea.style.height = textarea.scrollHeight + 'px';
+      box.classList.toggle('collapsed', textarea.value.trim() === '');
+      localStorage.setItem(key, textarea.value);
+    }
+
+    textarea.addEventListener('input', update);
+    update();
+  }
+
+  // Setup add-item functionality if box has item list
+  const itemList = box.querySelector('.item-list');
+  const addBtn = box.querySelector('.add-item');
+
+  if(itemList && addBtn) {
+    const storageKey = key + '-items';
+    const savedItems = JSON.parse(localStorage.getItem(storageKey) || '[]');
+
+    savedItems.forEach(data => createItem(data));
+
+    addBtn.addEventListener('click', () => {
+      createItem();
+      saveItems();
+    });
+
+    function createItem(data = {}) {
+      const item = document.createElement('div');
+      item.className = 'reminder-item';
+
+      item.innerHTML = `
+        <div class="item-row">
+          <span class="bullet"></span>
+          <input type="text" placeholder="Task title" value="${data.title || ''}">
+          <select class="importance-pill">
+            <option value="low">LOW</option>
+            <option value="med">MED</option>
+            <option value="high">HIGH</option>
+          </select>
+          <button class="delete-item">×</button>
+        </div>
+        <textarea placeholder="Description...">${data.desc || ''}</textarea>
+      `;
+
+      const input = item.querySelector('input');
+      const textarea = item.querySelector('textarea');
+      const select = item.querySelector('.importance-pill');
+      const deleteBtn = item.querySelector('.delete-item');
+
+      select.value = data.importance || 'low';
+      updateImportanceColor();
+
+      function updateImportanceColor() {
+        select.classList.remove('low','med','high');
+        select.classList.add(select.value);
+      }
+
+      function autoResize() {
+        requestAnimationFrame(() => {
+          textarea.style.height = 'auto';
+          textarea.style.height = textarea.scrollHeight + 'px';
+          saveItems();
+        });
+      }
+
+      input.addEventListener('input', saveItems);
+      textarea.addEventListener('input', autoResize);
+      select.addEventListener('change', () => {
+        updateImportanceColor();
+        saveItems();
+      });
+
+      deleteBtn.addEventListener('click', () => {
+        item.remove();
+        saveItems();
+      });
+
+      itemList.appendChild(item);
+      autoResize();
+    }
+
+    function saveItems() {
+      const data = [];
+      itemList.querySelectorAll('.reminder-item').forEach(item => {
+        data.push({
+          title: item.querySelector('input').value,
+          desc: item.querySelector('textarea').value,
+          importance: item.querySelector('.importance-pill').value
+        });
+      });
+      localStorage.setItem(storageKey, JSON.stringify(data));
+    }
+  }
+});
+                   </script>
+  
+            <!--2nd page container-->
+                <div class="page-layer-right">
+  <div class="page-inner-right">
+
+    <!-- Top expanding reminder (can leave blank if you want) -->
+    <div class="reminder-box top-reminder-right" data-key="top-reminder-right">
+      <div class="box-header">
+        <button class="add-item">＋</button>
+      </div>
+      <div class="item-list"></div>
+    </div>
+
+    <!-- Scrollable columns -->
+    <div class="scroll-section-right">
+      <div class="columns-right">
+
+        <!-- COLUMN 1 -->
+        <div class="column-right">
+          <div class="reminder-box" data-key="right-col1-box1">
+            <div class="box-header">
+              <div class="box-title">BIO</div>
+              <button class="add-item">＋</button>
+            </div>
+            <div class="item-list"></div>
+          </div>
+
+          <div class="reminder-box" data-key="right-col1-box2">
+            <div class="box-header">
+              <div class="box-title">STATS</div>
+              <button class="add-item">＋</button>
+            </div>
+            <div class="item-list"></div>
+          </div>
+        </div>
+
+        <!-- COLUMN 2 -->
+        <div class="column-right">
+          <div class="reminder-box" data-key="right-col2-box1">
+            <div class="box-header">
+              <div class="box-title">CHEM</div>
+              <button class="add-item">＋</button>
+            </div>
+            <div class="item-list"></div>
+          </div>
+
+          <div class="reminder-box" data-key="right-col2-box2">
+            <div class="box-header">
+              <div class="box-title">ETHICS</div>
+              <button class="add-item">＋</button>
+            </div>
+            <div class="item-list"></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+                      <!-- second page script -->
+<script>
+/* ==============================
+   FUNCTION TO SETUP RIGHT PAGE COLUMN BOXES
+============================== */
+document.querySelectorAll('.page-inner-right .reminder-box:not(.top-reminder-right)').forEach(box => {
+  const key = box.dataset.key;
+  const textarea = box.querySelector('textarea');
+
+  // Autosize & save textarea
+  if(textarea) {
+    const saved = localStorage.getItem(key);
+    if(saved) textarea.value = saved;
+
+    const update = () => {
+      textarea.style.height = 'auto';
+      textarea.style.height = textarea.scrollHeight + 'px';
+      box.classList.toggle('collapsed', textarea.value.trim() === '');
+      localStorage.setItem(key, textarea.value);
+    }
+
+    textarea.addEventListener('input', update);
+    update();
+  }
+
+  const itemList = box.querySelector('.item-list');
+  const addBtn = box.querySelector('.add-item');
+
+  if(itemList && addBtn) {
+    const storageKey = key + '-items';
+    const savedItems = JSON.parse(localStorage.getItem(storageKey) || '[]');
+
+    savedItems.forEach(data => createItem(data));
+
+    addBtn.addEventListener('click', () => {
+      createItem();
+      saveItems();
+    });
+
+    function createItem(data = {}) {
+      const item = document.createElement('div');
+      item.className = 'reminder-item';
+
+      // Keep task-title + pill items only for column boxes
+      item.innerHTML = `
+        <div class="item-row">
+          <span class="bullet"></span>
+          <input type="text" placeholder="Task title" value="${data.title || ''}">
+          <select class="importance-pill">
+            <option value="low">LOW</option>
+            <option value="med">MED</option>
+            <option value="high">HIGH</option>
+          </select>
+          <button class="delete-item">×</button>
+        </div>
+        <textarea placeholder="Description...">${data.desc || ''}</textarea>
+      `;
+
+      const input = item.querySelector('input');
+      const textarea = item.querySelector('textarea');
+      const select = item.querySelector('.importance-pill');
+      const deleteBtn = item.querySelector('.delete-item');
+
+      select.value = data.importance || 'low';
+      updateImportanceColor();
+
+      function updateImportanceColor() {
+        select.classList.remove('low','med','high');
+        select.classList.add(select.value);
+      }
+
+      function autoResize() {
+        requestAnimationFrame(() => {
+          textarea.style.height = 'auto';
+          textarea.style.height = textarea.scrollHeight + 'px';
+          saveItems();
+        });
+      }
+
+      input.addEventListener('input', saveItems);
+      textarea.addEventListener('input', autoResize);
+      select.addEventListener('change', () => {
+        updateImportanceColor();
+        saveItems();
+      });
+
+      deleteBtn.addEventListener('click', () => {
+        item.remove();
+        saveItems();
+      });
+
+      itemList.appendChild(item);
+      autoResize();
+    }
+
+    function saveItems() {
+      const data = [];
+      itemList.querySelectorAll('.reminder-item').forEach(item => {
+        data.push({
+          title: item.querySelector('input').value,
+          desc: item.querySelector('textarea').value,
+          importance: item.querySelector('.importance-pill').value
+        });
+      });
+      localStorage.setItem(storageKey, JSON.stringify(data));
+    }
+  }
+});
+</script>
+
+  
+<script>
+const topRightBox = document.querySelector('.top-reminder-right .item-list');
+const topRightAdd = document.querySelector('.top-reminder-right .add-item');
+const topRightStorageKey = 'top-reminder-right-items';
+
+// Load saved items
+const savedTopRightItems = JSON.parse(localStorage.getItem(topRightStorageKey) || '[]');
+savedTopRightItems.forEach(data => createTopRightItem(data));
+
+topRightAdd.addEventListener('click', () => {
+  createTopRightItem();
+  saveTopRightItems();
+});
+
+function createTopRightItem(data = {}) {
+  const item = document.createElement('div');
+  item.className = 'reminder-item top-right-item';
+
+  item.innerHTML = `
+    <div class="item-row-right">
+      <span class="bullet"></span>
+
+      <input
+        class="task-text"
+        type="text"
+        placeholder="Task"
+        value="${data.text || ''}"
+      >
+
+      <input
+        class="task-date"
+        type="date"
+        value="${data.date || ''}"
+      >
+
+      <div class="progress-track">
+        <div class="progress-bar"></div>
+      </div>
+
+      <button class="delete-item">×</button>
+    </div>
+  `;
+
+  const textInput = item.querySelector('.task-text');
+  const dateInput = item.querySelector('.task-date');
+  const progressBar = item.querySelector('.progress-bar');
+  const deleteBtn = item.querySelector('.delete-item');
+
+function updateProgress() {
+  if (!dateInput.value) {
+    progressBar.style.width = '0%';
+    progressBar.style.backgroundColor = '#4caf50';
+    return;
+  }
+
+  const now = new Date();
+  const due = new Date(dateInput.value);
+  const daysLeft = (due - now) / (1000 * 60 * 60 * 24);
+
+  let percent = 0;
+  let color = '#8db10b'; // green
+
+if (daysLeft > 25) {          // very far
+    percent = 10;
+    color = '#8db10b';        // bright green
+} else if (daysLeft > 14) {   // 2–3 weeks away
+    percent = 25;             // slightly more filled
+    color = '#a3c93b';        // yellow-greenish
+} else if (daysLeft > 7) {    // 1–2 weeks away
+    percent = 50;
+    color = '#cddc39';        // yellow-green
+} else if (daysLeft > 3) {    // few days left
+    percent = 75;
+    color = '#ff9800';        // orange
+} else if (daysLeft > 0) {    // 1–3 days
+    percent = 98;
+    color = '#d32f2f';        // near-dark red
+} else {                       // past due
+    percent = 100;
+    color = '#8b0000';        // dark red
+}
+
+
+  progressBar.style.width = percent + '%';
+  progressBar.style.backgroundColor = color;
+}
+
+
+  textInput.addEventListener('input', saveTopRightItems);
+  dateInput.addEventListener('change', () => {
+    updateProgress();
+    saveTopRightItems();
+  });
+
+  deleteBtn.addEventListener('click', () => {
+    item.remove();
+    saveTopRightItems();
+  });
+
+  setInterval(updateProgress, 60000);
+  updateProgress();
+
+  topRightBox.appendChild(item);
+  saveTopRightItems();
+}
+
+function saveTopRightItems() {
+  const items = [];
+  topRightBox.querySelectorAll('.top-right-item').forEach(item => {
+    items.push({
+      text: item.querySelector('.task-text').value,
+      date: item.querySelector('.task-date').value,
+      start: item.dataset?.start
+    });
+  });
+  localStorage.setItem(topRightStorageKey, JSON.stringify(items));
+}
+</script>
+
+
+
+
+  
+
+</body>
+</html>
